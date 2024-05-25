@@ -1,0 +1,21 @@
+name: poc-microsoft-sso
+networks:
+  poc-microsoft-sso:
+    name: poc-microsoft-sso
+services:
+  poc-microsoft-sso-mongo:
+    image: mongo
+    hostname: mongo
+    container_name: poc-microsoft-sso-mongo
+    ports: [ '${MONGO_PORT:-27017}:27017' ]
+    networks: [ 'poc-microsoft-sso' ]
+    volumes: [ './.docker/mongo/db.js:/docker-entrypoint-initdb.d/db.js' ] 
+    environment: 
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+      MONGO_INITDB_DATABASE: mongo
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.stats()"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
